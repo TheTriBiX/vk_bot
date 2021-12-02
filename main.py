@@ -22,35 +22,37 @@ def send_message(user_id, message, keyboard=None):
     vk.method('messages.send', post)
 
 
-for event in VkLongPoll(vk).listen():
-    if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-        msg = event.text.lower()
-        user_id = event.user_id
+if __name__ == '__main__':
+    print('starting...')
+    for event in VkLongPoll(vk).listen():
+        if event.type == VkEventType.MESSAGE_NEW and event.to_me:
+            msg = event.text.lower()
+            user_id = event.user_id
 
-        if msg == "начать":
-            send_message(user_id, 'Начинаем регистрацию!')
-            keyboard = VkKeyboard(one_time=True)
-            keyboard.add_button('Староста', VkKeyboardColor.PRIMARY)
-            keyboard.add_button('Ученик', VkKeyboardColor.NEGATIVE)
-            send_message(user_id, "тыкни кнопку", keyboard)
+            if msg == "начать":
+                send_message(user_id, 'Начинаем регистрацию!')
+                keyboard = VkKeyboard(one_time=True)
+                keyboard.add_button('Староста', VkKeyboardColor.PRIMARY)
+                keyboard.add_button('Ученик', VkKeyboardColor.NEGATIVE)
+                send_message(user_id, "тыкни кнопку", keyboard)
 
-        if msg in ['староста', 'ученик']:
-            role = msg
-            cur.execute(f"""SELECT id FROM user_role WHERE id={user_id}""")
-            if cur.fetchone():
-                send_message(user_id, 'Ты уже зарегистрирован.')
-            else:
-                cur.execute("""INSERT INTO user_role(id, role)
+            if msg in ['староста', 'ученик']:
+                role = msg
+                cur.execute(f"""SELECT id FROM user_role WHERE id={user_id}""")
+                if cur.fetchone():
+                    send_message(user_id, 'Ты уже зарегистрирован.')
+                else:
+                    cur.execute("""INSERT INTO user_role(id, role)
                                  VALUES(?, ?);""", (user_id, role))
-                send_message(user_id, f'Поздравляю, можешь продолжать.')
-                conn.commit()
+                    send_message(user_id, f'Поздравляю, можешь продолжать.')
+                    conn.commit()
 
-        # if msg == 'привет':
-        #     send_message(user_id, 'сдарова ебать')
-        #     send_message(user_id, 'напиши кто ты по масти(староста/попуск)')
-        #
-        # if msg in ['староста', 'попуск']:
-        #     cur.execute("""INSERT INTO user_role(id, role)
-        #     VALUES(?, ?);""", (user_id, msg))
-        #     send_message(user_id, f'понял тебя {msg}')
-        #     conn.commit()
+            # if msg == 'привет':
+            #     send_message(user_id, 'сдарова ебать')
+            #     send_message(user_id, 'напиши кто ты по масти(староста/попуск)')
+            #
+            # if msg in ['староста', 'попуск']:
+            #     cur.execute("""INSERT INTO user_role(id, role)
+            #     VALUES(?, ?);""", (user_id, msg))
+            #     send_message(user_id, f'понял тебя {msg}')
+            #     conn.commit()
