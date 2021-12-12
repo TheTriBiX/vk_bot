@@ -46,13 +46,3 @@ if __name__ == '__main__':
                                  VALUES(?, ?);""", (user_id, role))
                     send_message(user_id, f'Поздравляю, можешь продолжать.')
                     conn.commit()
-
-            # if msg == 'привет':
-            #     send_message(user_id, 'сдарова ебать')
-            #     send_message(user_id, 'напиши кто ты по масти(староста/попуск)')
-            #
-            # if msg in ['староста', 'попуск']:
-            #     cur.execute("""INSERT INTO user_role(id, role)
-            #     VALUES(?, ?);""", (user_id, msg))
-            #     send_message(user_id, f'понял тебя {msg}')
-            #     conn.commit()
