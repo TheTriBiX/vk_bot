@@ -47,6 +47,11 @@ if __name__ == '__main__':
                     send_message(user_id, f'Поздравляю, можешь продолжать.')
                     conn.commit()
 
+            if msg == "Ты уже зарегистрирован.":
+                send_message(user_id, 'Выбери, что хочешь посмотреть')
+                keyboard = VkKeyboard(one_time=True)
+                keyboard.add_button('Текущие дедлайны', VkKeyboardColor.PRIMARY)
+
             # if msg == 'привет':
             #     send_message(user_id, 'сдарова ебать')
             #     send_message(user_id, 'напиши кто ты по масти(староста/попуск)')
