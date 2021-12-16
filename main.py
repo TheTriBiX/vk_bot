@@ -29,6 +29,7 @@ def send_message(user_id, message, keyboard=None):
 if __name__ == '__main__':
     print('starting...')
     quest = 0
+    dead = 0
     for event in VkLongPoll(vk).listen():
         if event.type == VkEventType.MESSAGE_NEW and event.to_me:
             msg = event.text.lower()
