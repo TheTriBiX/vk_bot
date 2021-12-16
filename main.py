@@ -9,7 +9,7 @@ with open('token.txt') as f:
 vk = vk_api.VkApi(token=API_TOKEN)
 conn = sqlite3.connect('users.db')
 cur = conn.cursor()
-
+first_time = True
 
 def send_message(user_id, message, keyboard=None):
     post = {
@@ -25,6 +25,8 @@ def send_message(user_id, message, keyboard=None):
 if __name__ == '__main__':
     print('starting...')
     for event in VkLongPoll(vk).listen():
+        if event.type == VkEventType.USER_ONLINE and first_time:
+            print('Пользователь', event.user_id, 'онлайн', event.platform)
         if event.type == VkEventType.MESSAGE_NEW and event.to_me:
             msg = event.text.lower()
             user_id = event.user_id
@@ -34,7 +36,7 @@ if __name__ == '__main__':
                 keyboard = VkKeyboard(one_time=True)
                 keyboard.add_button('Староста', VkKeyboardColor.PRIMARY)
                 keyboard.add_button('Ученик', VkKeyboardColor.NEGATIVE)
-                send_message(user_id, "тыкни кнопку", keyboard)
+                send_message(user_id, 'тыкни кнопку', keyboard)
 
             if msg in ['староста', 'ученик']:
                 role = msg
