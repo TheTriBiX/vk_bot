@@ -35,6 +35,7 @@ if __name__ == '__main__':
 
             if quest == 1:
                 ask_questions(user_id, msg)
+                send_message(184299452, "мы уведомили старосту, жди ответа")
 
             if msg == "начать":
                 send_message(user_id, 'Начинаем регистрацию!')
