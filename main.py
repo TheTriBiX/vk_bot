@@ -3,6 +3,7 @@ import time
 from vk_api.longpoll import VkLongPoll, VkEventType
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 import sqlite3
+from Deadline import deadline
 
 with open('token.txt') as f:
     API_TOKEN = str(f.readline())
@@ -10,6 +11,7 @@ vk = vk_api.VkApi(token=API_TOKEN)
 conn = sqlite3.connect('users.db')
 cur = conn.cursor()
 first_time = True
+fio = False
 
 
 def send_message(user_id, message, keyboard=None):
@@ -26,8 +28,6 @@ def send_message(user_id, message, keyboard=None):
 if __name__ == '__main__':
     print('starting...')
     for event in VkLongPoll(vk).listen():
-        if event.type == VkEventType.USER_ONLINE and first_time:
-            print('Пользователь', event.user_id, 'онлайн', event.platform)
         if event.type == VkEventType.MESSAGE_NEW and event.to_me:
             msg = event.text.lower()
             user_id = event.user_id
@@ -39,17 +39,23 @@ if __name__ == '__main__':
                 keyboard.add_button('Ученик', VkKeyboardColor.NEGATIVE)
                 send_message(user_id, 'тыкни кнопку', keyboard)
 
-            if msg in ['староста', 'ученик']:
+            if msg in ['староста', 'ученик'] and not cur.execute(
+                    f"""SELECT id FROM user_role WHERE id={user_id}""").fetchone():
                 role = msg
-                cur.execute(f"""SELECT id FROM user_role WHERE id={user_id}""")
-                if cur.fetchone():
-                    send_message(user_id, 'Ты уже зарегистрирован.')
+                cur.execute("""INSERT INTO user_role(id, role)
+                             VALUES(?, ?);""", (user_id, role))
+                send_message(user_id, f'Поздравляю, можешь продолжать. Для продолжения напиши "помощь"')
+                conn.commit()
 
-                else:
-                    cur.execute("""INSERT INTO user_role(id, role)
-                                 VALUES(?, ?);""", (user_id, role))
-                    send_message(user_id, f'Поздравляю, можешь продолжать. Для продолжения напиши "помощь"')
-                    conn.commit()
+            if fio:
+                print(msg)
+                cur.execute(f"""UPDATE user_role
+                                SET full_name='{msg}' 
+                                WHERE id={user_id};""",)
+
+            if msg == 'имя':
+                send_message(user_id, "Напиши свое ФИО\n пример: Ианов Иван Иванович")
+                fio = True
 
             if msg == "помощь":
                 keyboard = VkKeyboard(one_time=True)
@@ -65,3 +71,18 @@ if __name__ == '__main__':
                 keyboard.add_button('АиП')
                 keyboard.add_button('АСиС')
                 send_message(user_id, 'тыкни кнопку', keyboard)
+
+            if msg == "аип":
+
+                a = deadline()
+                for i in a:
+                    message = ''
+                    for object in i:
+                        if object != None:
+                            message += str(object)
+                            message += ' - '
+                    message = message[:-3]
+                    send_message(user_id, message)
+
+            #if msg == 'расписание':
+            #   pass
