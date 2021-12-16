@@ -75,9 +75,11 @@ if __name__ == '__main__':
             if msg == "дедлайны":
                 send_message(user_id, 'Выбор предмета')
                 keyboard = VkKeyboard(one_time=True)
-                keyboard.add_button('Информатика')
                 keyboard.add_button('АиП')
                 keyboard.add_button('АСиС')
+                keyboard.add_button('Инфа')
+                keyboard.add_button('Матан')
+                keyboard.add_button('Все дедлайны')
                 send_message(user_id, 'тыкни кнопку', keyboard)
                 dead = 1
 

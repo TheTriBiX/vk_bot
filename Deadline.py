@@ -11,6 +11,14 @@ def deadline(deadline_aip):
             """)
         if deadline_aip == 'аип':
             a = """SELECT * FROM deadline WHERE subject IN ('АиП')"""
+        elif deadline_aip == 'асис':
+            a = """SELECT * FROM deadline WHERE subject IN ('АСиС')"""
+        elif deadline_aip == 'инфа':
+            a = """SELECT * FROM deadline WHERE subject IN ('Информатика')"""
+        elif deadline_aip == 'матан':
+            a = """SELECT * FROM deadline WHERE subject IN ('Математический анализ')"""
+        else:
+            a = """SELECT * FROM deadline"""
 
         cur.execute(a)
         #for res in cur:
