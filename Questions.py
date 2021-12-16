@@ -12,16 +12,18 @@ def ask_questions(user_id, msg):
         send_message(user_id, 'Вопрос отправлен')
 
 
-def checktell_answer(user_id, msg):
-    question = cur.execute("""SELECT question FROM questions WHERE answer NOT IN ('ответ')""").fetchall()[0]
+def checktell_answer():
+    question = cur.execute("""SELECT question FROM questions WHERE answer NOT IN ('ответ')""").fetchone()
     if not question:
-        send_message(user_id, 'вопросов больше не осталось')
+        send_message(184299452, 'вопросов больше не осталось')
         return None
     else:
-        send_message(184299452, f'Вопрос, на который просят ответа: {msg}')
-        return question
+        send_message(184299452, f'Вопрос, на который просят ответа: {question[0]}')
+        return question[0]
 
 
 def answer_question(question, answer):
-    user_id = cur.execute(f"SELECT id FROM question WHERE question={question}").fetchall()[0]
-    send_message(user_id, f'Дорогой(ая) и любимый(ая) староста ответил(а) на твой вопрос: {answer}')
+    user_id = cur.execute(f"SELECT id FROM questions WHERE question={question}").fetchall()
+    for user in user_id:
+        send_message(user[0], f'Дорогой(ая) и любимый(ая) староста ответил(а) на твой вопрос: {answer}')
+    cur.execute(f'DELETE FROM questions WHERE question={question}')

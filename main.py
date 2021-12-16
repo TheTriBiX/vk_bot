@@ -41,9 +41,8 @@ if __name__ == '__main__':
                 send_message(user_id, "мы уведомили старосту, жди ответа")
                 quest = 0
 
-            if quest == 2:
+            if msg == 'Ответить на вопрос':
                 question = checktell_answer()
-                quest = 0
 
             if question:
                 answer_question(question, msg)
