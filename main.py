@@ -4,7 +4,7 @@ from vk_api.longpoll import VkLongPoll, VkEventType
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 import sqlite3
 from Deadline import deadline
-from Questions import ask_questions
+from Questions import ask_questions, checktell_answer, answer_question
 
 with open('token.txt') as f:
     API_TOKEN = str(f.readline())
@@ -30,6 +30,7 @@ if __name__ == '__main__':
     print('starting...')
     quest = 0
     dead = 0
+    question = None
     for event in VkLongPoll(vk).listen():
         if event.type == VkEventType.MESSAGE_NEW and event.to_me:
             msg = event.text.lower()
@@ -39,6 +40,14 @@ if __name__ == '__main__':
                 ask_questions(user_id, msg)
                 send_message(user_id, "мы уведомили старосту, жди ответа")
                 quest = 0
+
+            if quest == 2:
+                question = checktell_answer()
+                quest = 0
+
+            if question:
+                answer_question(question, msg)
+                question = None
 
             if msg == "начать":
                 send_message(user_id, 'Начинаем регистрацию!')
