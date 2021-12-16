@@ -10,7 +10,7 @@ def deadline(deadline_aip):
             description TEXT)
             """)
         if deadline_aip == 'аип':
-            a = """SELECT * FROM deadline WHERE subject IN ('аип')"""
+            a = """SELECT * FROM deadline WHERE subject IN ('АиП')"""
 
         cur.execute(a)
         #for res in cur:
