@@ -3,8 +3,7 @@ import time
 from vk_api.longpoll import VkLongPoll, VkEventType
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 import sqlite3
-from Deadline import deadline_aip
-from Deadline import deadline_inf
+from Deadline import deadline
 from Questions import ask_questions
 
 with open('token.txt') as f:
@@ -78,20 +77,11 @@ if __name__ == '__main__':
                 keyboard.add_button('АиП')
                 keyboard.add_button('АСиС')
                 send_message(user_id, 'тыкни кнопку', keyboard)
+                dead = 1
 
-            if msg == "аип":
-                a = deadline_aip()
-                for i in a:
-                    message = ''
-                    for object in i:
-                        if object != None:
-                            message += str(object)
-                            message += ' - '
-                    message = message[:-3]
-                    send_message(user_id, message)
-
-            if msg == "асис":
-                a = deadline_aip()
+            if dead == 1 and msg != "дедлайны":
+                a = deadline(msg)
+                dead = 0
                 for i in a:
                     message = ''
                     for object in i:
