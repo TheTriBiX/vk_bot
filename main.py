@@ -3,6 +3,7 @@ import time
 from vk_api.longpoll import VkLongPoll, VkEventType
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 import sqlite3
+from Questions import ask_questions
 
 with open('token.txt') as f:
     API_TOKEN = str(f.readline())
@@ -26,10 +27,14 @@ def send_message(user_id, message, keyboard=None):
 
 if __name__ == '__main__':
     print('starting...')
+    quest = 0
     for event in VkLongPoll(vk).listen():
         if event.type == VkEventType.MESSAGE_NEW and event.to_me:
             msg = event.text.lower()
             user_id = event.user_id
+
+            if quest == 1:
+                ask_questions(user_id, msg)
 
             if msg == "начать":
                 send_message(user_id, 'Начинаем регистрацию!')
@@ -73,3 +78,7 @@ if __name__ == '__main__':
 
             if msg == 'расписание':
                 pass
+
+            if msg == 'Задать вопрос':
+                quest = 1
+                send_message(user_id, 'Что ты хочешь узнать?')
