@@ -44,8 +44,24 @@ if __name__ == '__main__':
                 cur.execute(f"""SELECT id FROM user_role WHERE id={user_id}""")
                 if cur.fetchone():
                     send_message(user_id, 'Ты уже зарегистрирован.')
+
                 else:
                     cur.execute("""INSERT INTO user_role(id, role)
                                  VALUES(?, ?);""", (user_id, role))
-                    send_message(user_id, f'Поздравляю, можешь продолжать.')
+                    send_message(user_id, f'Поздравляю, можешь продолжать. Для продолжения напиши "помощь"')
                     conn.commit()
+
+            if msg == "помощь":
+                keyboard = VkKeyboard(one_time=True)
+                keyboard.add_button('Дедлайны')
+                keyboard.add_button('Расписание')
+                keyboard.add_button('Задать вопрос')
+                send_message(user_id, "Что ты хочешь узнать?", keyboard)
+
+            if msg == "дедлайны":
+                send_message(user_id, 'Выбор предмета')
+                keyboard = VkKeyboard(one_time=True)
+                keyboard.add_button('Информатика')
+                keyboard.add_button('АиП')
+                keyboard.add_button('АСиС')
+                send_message(user_id, 'тыкни кнопку', keyboard)
