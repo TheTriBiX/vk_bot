@@ -11,6 +11,7 @@ conn = sqlite3.connect('users.db')
 cur = conn.cursor()
 first_time = True
 
+
 def send_message(user_id, message, keyboard=None):
     post = {
         'user_id': user_id,
