@@ -79,7 +79,7 @@ if __name__ == '__main__':
             if msg == 'расписание':
                 pass
 
-            if msg == 'Задать вопрос':
+            if msg == 'задать вопрос':
                 quest = 1
                 send_message(user_id, 'Что ты хочешь узнать?')
 
