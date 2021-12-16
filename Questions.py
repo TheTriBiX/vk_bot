@@ -9,4 +9,4 @@ def ask_questions(user_id, msg):
         cur.execute("""INSERT INTO questions(id, question)
                                  VALUES(?, ?);""", (user_id, msg))
     else: #answer question
-        cur.execute()
+        pass
