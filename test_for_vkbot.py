@@ -15,8 +15,12 @@ class TestVisitPara(unittest.TestCase):
     def test_classtable_wrong_date(self):
         self.assertEqual(create_timetable('Семенищев Матвей Владимирович', 'фывфы'), None)
 
-    def test_deadline(self):
+    def test_deadline_type(self):
         self.assertEqual(deadline('аип').fetchone()[1], 'Проект')
+
+    def test_deadline_subject(self):
+        self.assertEqual(deadline('асис').fetchone()[0], 'асис')
+
 
 
 if __name__ == '__main__':
