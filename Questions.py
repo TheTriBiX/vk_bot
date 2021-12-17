@@ -24,7 +24,6 @@ def checktell_answer():
 
 
 def answer_question(question, answer):
-    print(question)
     user_id = cur.execute(f"SELECT id FROM questions WHERE question='{question}'").fetchall()
     for user in user_id:
         send_message(user[0], f'Ты задавал вопрос: {question}. '
