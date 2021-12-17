@@ -1,5 +1,6 @@
 import vk_api
 import time
+import datetime
 from vk_api.longpoll import VkLongPoll, VkEventType
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 import sqlite3
@@ -16,7 +17,8 @@ conn = sqlite3.connect('users.db')
 cur = conn.cursor()
 first_time = True
 fio = False
-
+date = datetime.datetime.now()
+today_date = f'{date.year}.{date.month}.{date.day}'
 
 def send_message(user_id, message, keyboard=None):
     post = {
@@ -217,7 +219,7 @@ if __name__ == '__main__':
             if msg == 'расписание' and cur.execute(
                     f"""SELECT fullname FROM user_role WHERE id={user_id}""").fetchone()[0]:
                 send_message(user_id, create_timetable(cur.execute(
-                    f"""SELECT fullname FROM user_role WHERE id={user_id}""").fetchone()[0]))
+                    f"""SELECT fullname FROM user_role WHERE id={user_id}""").fetchone()[0], today_date))
 
             if msg == 'задать вопрос':
                 quest = 1
