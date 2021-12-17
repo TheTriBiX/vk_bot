@@ -42,6 +42,7 @@ def create_starostamenu(user_id):
     keyboard = VkKeyboard(one_time=True)
     keyboard.add_button('добавить дедлайны')
     keyboard.add_button('ответить на вопрос')
+    keyboard.add_button('сделать объявление')
     send_message(user_id, "Что ты хочешь узнать?", keyboard)
 
 
