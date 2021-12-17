@@ -83,6 +83,7 @@ if __name__ == '__main__':
 
             if msg == 'сделать объявление':
                 announce = 1
+                send_message(184299452, 'Что должны узнать все студенты в группе?')
 
             if msg == "начать":
                 if cur.execute(f"""SELECT id FROM user_role WHERE id={user_id}""").fetchone():
