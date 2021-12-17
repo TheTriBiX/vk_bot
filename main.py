@@ -7,7 +7,7 @@ from Deadline import deadline, edit_deadline
 from timetable import create_timetable
 from Questions import ask_questions, checktell_answer, answer_question
 from announcement import create_announcement
-from easteregg_functions import visit_para, grade_bar, show_bars, anek
+from easteregg_functions import visit_para, grade_bar, show_bars
 
 with open('token.txt') as f:
     API_TOKEN = str(f.readline())
@@ -53,7 +53,6 @@ def create_funmenu(user_id):
     keyboard.add_button('Идти ли на пару?')
     keyboard.add_button('Оценить бары Москвы')
     keyboard.add_button('Посмотреть оценки баров Москвы')
-    keyboard.add_button('анекдот')
     keyboard.add_button('помощь')
     send_message(user_id, "Выбирай!", keyboard)
 
@@ -67,6 +66,7 @@ if __name__ == '__main__':
     bars = 0
     stage = 0
     lis = []
+    lis_bar = []
     for event in VkLongPoll(vk).listen():
         if event.type == VkEventType.MESSAGE_NEW and event.to_me:
             msg = event.text.lower()
@@ -103,26 +103,42 @@ if __name__ == '__main__':
                 visit_para(user_id)
                 create_funmenu(user_id)
 
-            if bars == 1:
-                grade_bar(0, user_id)
-                bars = 2
-            elif bars == 2:
-                grade_bar(1, user_id)
-                bars = 3
-            elif bars == 3:
-                grade_bar(2, user_id)
-                create_funmenu(user_id)
-
             if msg == 'оценить бары москвы':
-                send_message(user_id, 'Как называется бар?')
                 bars = 1
+                send_message(user_id, 'Какой бар? Напиши название.')
+            elif bars == 1:
+                lis_bar.append(msg)
+                send_message(user_id, 'Название добавлено')
+                bars = 2
+                send_message(user_id, 'Как бы ты оценил бар?')
+            elif bars == 2:
+                lis_bar.append(msg)
+                send_message(user_id, 'Оценка добавлена')
+                keyboard = VkKeyboard(one_time=True)
+                keyboard.add_button('Добавить описание бара')
+                keyboard.add_button('Не добавлять описание бара')
+                send_message(user_id, 'Добавить описание бара?', keyboard)
+                bars = 3
+            elif msg == 'добавить описание бара':
+                bars = 4
+                send_message(user_id, 'Какое описание бара?')
+            elif bars == 4:
+                lis_bar.append(msg)
+                grade_bar(bars, user_id, lis_bar)
+                bars = 0
+                lis_bar = []
+                send_message(user_id, 'Оценка бара добавлен')
+                create_mainmenu(user_id)
+            elif msg == 'не добавлять описание бара':
+                bars = 3
+                grade_bar(bars, user_id, lis_bar)
+                send_message(user_id, 'Оценка бара добавлена')
+                bars = 0
+                lis_bar = []
+                create_mainmenu(user_id)
 
             if msg == 'посмотреть оценки баров москвы':
                 show_bars(user_id)
-                create_funmenu(user_id)
-
-            if msg == 'анекдот':
-                anek(user_id)
                 create_funmenu(user_id)
 
             if msg == 'сделать объявление':
