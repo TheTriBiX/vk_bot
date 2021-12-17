@@ -46,7 +46,7 @@ def create_starostamenu(user_id):
     keyboard.add_button('Ответить на вопрос')
     keyboard.add_button('Сделать объявление')
     keyboard.add_button('Помощь', VkKeyboardColor.PRIMARY)
-    send_message(user_id, "Что ты хочешь узнать?", keyboard)
+    send_message(user_id, "Выбери пункт", keyboard)
 
 
 def create_funmenu(user_id):
