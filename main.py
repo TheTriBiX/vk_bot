@@ -101,8 +101,8 @@ if __name__ == '__main__':
                 create_announcement(msg)
 
             if msg == 'идти ли на пару?':
-                visit_para(user_id)
-                create_funmenu(user_id)
+                answer = visit_para()
+                create_funmenu(user_id, answer)
 
             if msg == 'оценить бары москвы':
                 bars = 1

@@ -3,10 +3,10 @@ import random
 import sqlite3 as sq
 
 
-def visit_para(user_id):
+def visit_para():
     possible = ['Иди!', 'Фиг с ней, не иди']
     answer = random.choice(possible)
-    send_message(user_id, answer)
+    return answer
 
 
 def grade_bar(stage, msg):
