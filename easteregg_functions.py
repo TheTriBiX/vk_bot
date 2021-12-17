@@ -1,9 +1,10 @@
-from basic_functions import send_message
 import random
 import sqlite3 as sq
 
 
 def visit_para():
+    """Функция visit_para() не принимает на вход никаких аргументов, отдает на выход
+    одну из двух возможных строк, итоговая строка выбирается рандомно."""
     possible = ['Иди!', 'Фиг с ней, не иди']
     answer = random.choice(possible)
     return answer
