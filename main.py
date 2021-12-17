@@ -4,6 +4,7 @@ from vk_api.longpoll import VkLongPoll, VkEventType
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 import sqlite3
 from Deadline import deadline
+from timetable import create_timetable
 from Questions import ask_questions, checktell_answer, answer_question
 
 with open('token.txt') as f:
@@ -27,7 +28,7 @@ def send_message(user_id, message, keyboard=None):
 
 
 def create_mainmenu(user_id):
-    keyboard = VkKeyboard(one_time=True)
+    keyboard = VkKeyboard(one_time=False)
     keyboard.add_button('Дедлайны')
     keyboard.add_button('Расписание')
     keyboard.add_button('Задать вопрос')
@@ -75,28 +76,35 @@ if __name__ == '__main__':
                 create_mainmenu(user_id)
 
             if msg == "начать":
-                send_message(user_id, 'Начинаем регистрацию!')
-                keyboard = VkKeyboard(one_time=True)
-                keyboard.add_button('Староста', VkKeyboardColor.PRIMARY)
-                keyboard.add_button('Ученик', VkKeyboardColor.NEGATIVE)
-                send_message(user_id, 'тыкни кнопку', keyboard)
+                if cur.execute(f"""SELECT id FROM user_role WHERE id={user_id}""").fetchone():
+                    send_message(user_id, 'Вы уже зарегистрированы, длы вызова меню напишите "помощь"')
+                else:
+                    send_message(user_id, 'Начинаем регистрацию!')
+                    keyboard = VkKeyboard(one_time=True)
+                    keyboard.add_button('Староста', VkKeyboardColor.PRIMARY)
+                    keyboard.add_button('Ученик', VkKeyboardColor.NEGATIVE)
+                    send_message(user_id, 'тыкни кнопку', keyboard)
 
             if msg in ['староста', 'ученик'] and not cur.execute(
                     f"""SELECT id FROM user_role WHERE id={user_id}""").fetchone():
                 role = msg
                 cur.execute("""INSERT INTO user_role(id, role)
                              VALUES(?, ?);""", (user_id, role))
-                send_message(user_id, f'Поздравляю, можешь продолжать. Для продолжения напиши "помощь"')
+                send_message(user_id, f'Поздравляю, можешь продолжать. Для продолжения напиши "имя"')
                 conn.commit()
 
-            if fio:
+            if fio and msg != 'имя':
                 print(msg)
                 cur.execute(f"""UPDATE user_role
-                                SET full_name='{msg}' 
-                                WHERE id={user_id};""",)
+                                SET fullname='{str(msg)}'
+                                WHERE id={user_id};""", )
+                fio = False
+                send_message(user_id, "Все готово! Для вызова меня напиши 'помощь'.\n"
+                                      "Если ошибся в написаниии ФИО напиши: смена ФИО")
+                conn.commit()
 
             if msg == 'имя':
-                send_message(user_id, "Напиши свое ФИО\n пример: Ианов Иван Иванович")
+                send_message(user_id, "Напиши свое ФИО\n пример: Иванов Иван Иванович")
                 fio = True
 
             if msg == "помощь":
@@ -126,9 +134,15 @@ if __name__ == '__main__':
                     send_message(user_id, message)
                 create_mainmenu(user_id)
 
-            if msg == 'расписание':
-                pass
+            if msg == 'расписание' and cur.execute(
+                    f"""SELECT fullname FROM user_role WHERE id={user_id}""").fetchone()[0]:
+                send_message(user_id, create_timetable(cur.execute(
+                    f"""SELECT fullname FROM user_role WHERE id={user_id}""").fetchone()[0]))
 
             if msg == 'задать вопрос':
                 quest = 1
                 send_message(user_id, 'Что ты хочешь узнать?')
+
+            if msg == 'смена ФИО':
+                fio = True
+                send_message(user_id, "Напиши свое ФИО\n пример: Иванов Иван Иванович")
