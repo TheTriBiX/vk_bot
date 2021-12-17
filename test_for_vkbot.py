@@ -14,6 +14,5 @@ class TestVisitPara(unittest.TestCase):
     def test_classtable_wrong_date(self):
         self.assertEqual(create_timetable('Семенищев Матвей Владимирович', 'фывфы'), None)
 
-
 if __name__ == '__main__':
     unittest.main()

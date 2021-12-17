@@ -20,7 +20,13 @@ fio = False
 date = datetime.datetime.now()
 today_date = f'{date.year}.{date.month}.{date.day}'
 
+
 def send_message(user_id, message, keyboard=None):
+    """отправляет сообщение пользователю
+    :param
+    user_id - vk id пользователя которому нужно отправить сообщение
+    message - текст сообщения
+    keyboard - передает виртуальную клавиатуру которую нужно будет вывести вместе с сообщением"""
     post = {
         'user_id': user_id,
         'message': message,

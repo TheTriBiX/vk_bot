@@ -3,6 +3,12 @@ import datetime
 
 
 def create_timetable(name, today_date):
+    """делает запрос на сайт ВШЭ с расписанием и получает ответ в формате .json затем возвращает расписание в текстовом
+     формате
+     :param
+     name - ФИО ученика, чье расписание нужно вывести
+     today_date - дата на которую нужно получить расписание
+     """
     table = ''
     id_request = requests.get(f'https://ruz.hse.ru/api/search?term={name}&type=student')
     user_id = id_request.json()[0]['id']
