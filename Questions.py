@@ -29,3 +29,4 @@ def answer_question(question, answer):
         send_message(user[0], f'Ты задавал вопрос: {question}. '
                               f'Дорогой(ая) и любимый(ая) староста ответил(а) на твой вопрос: {answer}')
     cur.execute(f"DELETE FROM questions WHERE question='{question}'")
+    conn.commit()
