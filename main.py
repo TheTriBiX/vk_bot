@@ -257,14 +257,14 @@ if __name__ == '__main__':
                 send_message(user_id, 'Какое описание?')
             elif stage == 5:
                 lis.append(msg)
-                edit_deadline(stage, user_id, lis)
+                edit_deadline(stage, lis)
                 stage = 0
                 lis = []
                 send_message(user_id, 'Дедлайн добавлен')
                 create_mainmenu(user_id)
             elif msg == 'не добавлять описание':
                 stage = 4
-                edit_deadline(stage, user_id, lis)
+                edit_deadline(stage, lis)
                 send_message(user_id, 'Дедлайн добавлен')
                 stage = 0
                 lis = []
