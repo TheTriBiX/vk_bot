@@ -32,7 +32,7 @@ def create_mainmenu(user_id):
     keyboard.add_button('Дедлайны')
     keyboard.add_button('Расписание')
     keyboard.add_button('Задать вопрос')
-    if cur.execute(f"""SELECT role FROM user_role WHERE id={user_id}""").fetchone() == 'староста':
+    if cur.execute(f"""SELECT role FROM user_role WHERE id={user_id}""").fetchone()[0] == 'староста':
         keyboard.add_button('Редактирование информации')
     send_message(user_id, "Что ты хочешь узнать?", keyboard)
 
@@ -56,7 +56,7 @@ if __name__ == '__main__':
             user_id = event.user_id
 
             if msg == 'редактирование информации':
-                if cur.execute(f"""SELECT role FROM user_role WHERE id={user_id}""").fetchone() == 'староста':
+                if cur.execute(f"""SELECT role FROM user_role WHERE id={user_id}""").fetchone()[0] == 'староста':
                     create_starostamenu(user_id)
                 else:
                     send_message(user_id, 'Кто-то попытался сломать систему, но система сильнее BibleThump')
@@ -67,13 +67,13 @@ if __name__ == '__main__':
                 quest = 0
                 create_mainmenu(user_id)
 
-            if msg == 'Ответить на вопрос':
-                question = checktell_answer()
-
             if question:
                 answer_question(question, msg)
                 question = None
                 create_mainmenu(user_id)
+
+            if msg == 'ответить на вопрос':
+                question = checktell_answer()
 
             if msg == "начать":
                 if cur.execute(f"""SELECT id FROM user_role WHERE id={user_id}""").fetchone():

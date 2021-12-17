@@ -14,13 +14,13 @@ def ask_questions(user_id, msg):
 
 
 def checktell_answer():
-    question = cur.execute("""SELECT question FROM questions WHERE answer NOT IN ('ответ')""").fetchone()
+    question = cur.execute("""SELECT question FROM questions""").fetchone()[0]
     if not question:
         send_message(184299452, 'вопросов больше не осталось')
         return None
     else:
-        send_message(184299452, f'Вопрос, на который просят ответа: {question[0]}')
-        return question[0]
+        send_message(184299452, f'Вопрос, на который просят ответа: {question}')
+        return question
 
 
 def answer_question(question, answer):
