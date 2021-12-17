@@ -6,7 +6,9 @@ cur = conn.cursor()
 
 
 def visit_para(user_id):
-    pass
+    possible = ['Иди!', 'Фиг с ней, не иди']
+    answer = random.choice(possible)
+    send_message(user_id, answer)
 
 
 def grade_bar(stage, user_id):
