@@ -6,6 +6,6 @@ cur = conn.cursor()
 
 
 def create_announcement(msg):
-    users = cur.execute(f"SELECT user_id FROM user_role WHERE role='ученик'").fetchall()
+    users = cur.execute(f"SELECT id FROM user_role WHERE role='ученик'").fetchall()
     for id in users:
         send_message(id, msg)
