@@ -7,6 +7,7 @@ from Deadline import deadline
 from timetable import create_timetable
 from Questions import ask_questions, checktell_answer, answer_question
 from announcement import create_announcement
+from easteregg_functions import visit_para, grade_bar, show_bars, anek
 
 with open('token.txt') as f:
     API_TOKEN = str(f.readline())
@@ -35,6 +36,7 @@ def create_mainmenu(user_id):
     keyboard.add_button('Задать вопрос')
     if cur.execute(f"""SELECT role FROM user_role WHERE id={user_id}""").fetchone()[0] == 'староста':
         keyboard.add_button('Редактирование информации')
+    keyboard.add_button('Приколюшки')
     send_message(user_id, "Что ты хочешь узнать?", keyboard)
 
 
@@ -46,12 +48,23 @@ def create_starostamenu(user_id):
     send_message(user_id, "Что ты хочешь узнать?", keyboard)
 
 
+def create_funmenu(user_id):
+    keyboard = VkKeyboard(one_time=True)
+    keyboard.add_button('Идти ли на пару?')
+    keyboard.add_button('Оценить бары Москвы')
+    keyboard.add_button('Посмотреть оценки баров Москвы')
+    keyboard.add_button('анекдот')
+    keyboard.add_button('помощь')
+    send_message(user_id, "Выбирай!", keyboard)
+
+
 if __name__ == '__main__':
     print('starting...')
     quest = 0
     dead = 0
     question = None
     announce = 0
+    bars = 0
     for event in VkLongPoll(vk).listen():
         if event.type == VkEventType.MESSAGE_NEW and event.to_me:
             msg = event.text.lower()
@@ -77,9 +90,36 @@ if __name__ == '__main__':
             if msg == 'ответить на вопрос':
                 question = checktell_answer()
 
+            if msg == 'приколюшки':
+                create_funmenu(user_id)
+
             if announce == 1:
                 announce = 0
                 create_announcement(msg)
+
+            if msg == 'идти ли на пару?':
+                visit_para(user_id)
+                create_funmenu(user_id)
+
+            if bars == 1:
+                grade_bar(1, user_id)
+                bars = 2
+            elif bars == 2:
+                grade_bar(2, user_id)
+                create_funmenu(user_id)
+                bars = 0
+
+            if msg == 'оценить бары москвы':
+                send_message(user_id, 'Как называется бар?')
+                bars = 1
+
+            if msg == 'посмотреть оценки баров москвы':
+                show_bars(user_id)
+                create_funmenu(user_id)
+
+            if msg == 'анекдот':
+                anek(user_id)
+                create_funmenu(user_id)
 
             if msg == 'сделать объявление':
                 announce = 1
