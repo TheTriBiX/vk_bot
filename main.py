@@ -6,6 +6,7 @@ import sqlite3
 from Deadline import deadline
 from timetable import create_timetable
 from Questions import ask_questions, checktell_answer, answer_question
+from announcement import create_announcement
 
 with open('token.txt') as f:
     API_TOKEN = str(f.readline())
@@ -49,6 +50,7 @@ if __name__ == '__main__':
     quest = 0
     dead = 0
     question = None
+    announce = 0
     for event in VkLongPoll(vk).listen():
         if event.type == VkEventType.MESSAGE_NEW and event.to_me:
             msg = event.text.lower()
@@ -73,6 +75,13 @@ if __name__ == '__main__':
 
             if msg == 'ответить на вопрос':
                 question = checktell_answer()
+
+            if announce == 1:
+                announce = 0
+                create_announcement(msg)
+
+            if msg == 'сделать объявление':
+                announce = 1
 
             if msg == "начать":
                 if cur.execute(f"""SELECT id FROM user_role WHERE id={user_id}""").fetchone():
