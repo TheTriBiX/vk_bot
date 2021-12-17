@@ -138,8 +138,16 @@ if __name__ == '__main__':
                 create_mainmenu(user_id)
 
             if msg == 'посмотреть оценки баров москвы':
-                show_bars(user_id)
-                create_funmenu(user_id)
+                all_info = show_bars()
+                for bar in all_info:
+                    message = ''
+                    for data in bar:
+                        if data != None:
+                            message += str(data)
+                            message += ' - '
+                    message = message[:-3]
+                    send_message(user_id, message)
+                create_mainmenu(user_id)
 
             if msg == 'сделать объявление':
                 announce = 1

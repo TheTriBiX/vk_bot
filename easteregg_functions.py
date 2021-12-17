@@ -20,7 +20,11 @@ def grade_bar(stage, user_id, msg):
                         (msg))
 
 
+def show_bars():
+    with sq.connect("users.db") as db:
+        cur = db.cursor()
+    a = """SELECT * FROM bars"""
+    cur.execute(a)
+    return cur
 
-def show_bars(user_id):
-    pass
 
