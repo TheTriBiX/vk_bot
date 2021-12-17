@@ -16,7 +16,7 @@ def ask_questions(user_id, msg):
 def checktell_answer():
     question = cur.execute("""SELECT question FROM questions""").fetchone()[0]
     if not question:
-        send_message(184299452, 'вопросов больше не осталось')
+        send_message(184299452, 'Вопросов больше не осталось')
         return None
     else:
         send_message(184299452, f'Вопрос, на который просят ответа: {question}')

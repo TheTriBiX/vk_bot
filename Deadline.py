@@ -12,20 +12,20 @@ def deadline(deadline_aip):
             description TEXT)
             """)
         if deadline_aip == 'аип':
-            a = """SELECT * FROM deadline WHERE subject IN ('аип')"""
+            a = """SELECT * FROM deadline WHERE subject IN ('АиП')"""
         elif deadline_aip == 'асис':
-            a = """SELECT * FROM deadline WHERE subject IN ('асис')"""
+            a = """SELECT * FROM deadline WHERE subject IN ('АСиС')"""
         elif deadline_aip == 'инфа':
-            a = """SELECT * FROM deadline WHERE subject IN ('инфа')"""
+            a = """SELECT * FROM deadline WHERE subject IN ('Инфа')"""
         elif deadline_aip == 'матан':
-            a = """SELECT * FROM deadline WHERE subject IN ('матан')"""
+            a = """SELECT * FROM deadline WHERE subject IN ('Матан')"""
         else:
             a = """SELECT * FROM deadline"""
         cur.execute(a)
         return cur
 
 
-def edit_deadline(stage, user_id, msg):
+def edit_deadline(stage, msg):
     with sq.connect("users.db") as db:
         cur = db.cursor()
         if stage == 4:
@@ -34,4 +34,3 @@ def edit_deadline(stage, user_id, msg):
         elif stage == 5:
             cur.execute("""INSERT INTO deadline (subject, type, date, description) VALUES (?, ?, ?, ?)""",
                         (msg))
-

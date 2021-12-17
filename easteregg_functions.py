@@ -9,7 +9,7 @@ def visit_para(user_id):
     send_message(user_id, answer)
 
 
-def grade_bar(stage, user_id, msg):
+def grade_bar(stage, msg):
     with sq.connect("users.db") as db:
         cur = db.cursor()
         if stage == 3:
@@ -26,5 +26,3 @@ def show_bars():
     a = """SELECT * FROM bars"""
     cur.execute(a)
     return cur
-
-

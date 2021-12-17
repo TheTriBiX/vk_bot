@@ -11,4 +11,4 @@ def registration(user_id):
     keyboard = VkKeyboard(one_time=True)
     keyboard.add_button('Староста', VkKeyboardColor.PRIMARY)
     keyboard.add_button('Ученик', VkKeyboardColor.NEGATIVE)
-    send_message(user_id, 'тыкни кнопку', keyboard)
+    send_message(user_id, 'Выбери кнопку', keyboard)

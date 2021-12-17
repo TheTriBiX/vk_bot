@@ -35,16 +35,17 @@ def create_mainmenu(user_id):
     keyboard.add_button('Расписание')
     keyboard.add_button('Задать вопрос')
     if cur.execute(f"""SELECT role FROM user_role WHERE id={user_id}""").fetchone()[0] == 'староста':
-        keyboard.add_button('Редактирование информации')
+        keyboard.add_button('Редактирование информации', VkKeyboardColor.NEGATIVE)
     keyboard.add_button('Приколюшки')
     send_message(user_id, "Что ты хочешь узнать?", keyboard)
 
 
 def create_starostamenu(user_id):
     keyboard = VkKeyboard(one_time=True)
-    keyboard.add_button('добавить дедлайны')
-    keyboard.add_button('ответить на вопрос')
-    keyboard.add_button('сделать объявление')
+    keyboard.add_button('Добавить дедлайны')
+    keyboard.add_button('Ответить на вопрос')
+    keyboard.add_button('Сделать объявление')
+    keyboard.add_button('Помощь', VkKeyboardColor.PRIMARY)
     send_message(user_id, "Что ты хочешь узнать?", keyboard)
 
 
@@ -53,7 +54,7 @@ def create_funmenu(user_id):
     keyboard.add_button('Идти ли на пару?')
     keyboard.add_button('Оценить бары Москвы')
     keyboard.add_button('Посмотреть оценки баров Москвы')
-    keyboard.add_button('помощь')
+    keyboard.add_button('Помощь', VkKeyboardColor.PRIMARY)
     send_message(user_id, "Выбирай!", keyboard)
 
 
@@ -161,7 +162,7 @@ if __name__ == '__main__':
                     keyboard = VkKeyboard(one_time=True)
                     keyboard.add_button('Староста', VkKeyboardColor.PRIMARY)
                     keyboard.add_button('Ученик', VkKeyboardColor.NEGATIVE)
-                    send_message(user_id, 'тыкни кнопку', keyboard)
+                    send_message(user_id, 'Выбери кнопку', keyboard)
 
             if msg in ['староста', 'ученик'] and not cur.execute(
                     f"""SELECT id FROM user_role WHERE id={user_id}""").fetchone():
