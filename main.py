@@ -3,7 +3,7 @@ import time
 from vk_api.longpoll import VkLongPoll, VkEventType
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 import sqlite3
-from Deadline import deadline
+from Deadline import deadline, edit_deadline
 from timetable import create_timetable
 from Questions import ask_questions, checktell_answer, answer_question
 from announcement import create_announcement
@@ -65,6 +65,8 @@ if __name__ == '__main__':
     question = None
     announce = 0
     bars = 0
+    stage = 0
+    lis = []
     for event in VkLongPoll(vk).listen():
         if event.type == VkEventType.MESSAGE_NEW and event.to_me:
             msg = event.text.lower()
@@ -169,7 +171,7 @@ if __name__ == '__main__':
                 keyboard.add_button('АСиС')
                 keyboard.add_button('Инфа')
                 keyboard.add_button('Матан')
-                keyboard.add_button('Все дедлайны')
+                keyboard.add_button('Все дедлайны', VkKeyboardColor.PRIMARY)
                 send_message(user_id, 'тыкни кнопку', keyboard)
                 dead = 1
 
@@ -198,3 +200,47 @@ if __name__ == '__main__':
             if msg == 'смена ФИО':
                 fio = True
                 send_message(user_id, "Напиши свое ФИО\n пример: Иванов Иван Иванович")
+
+            if msg == 'добавить дедлайны':
+                stage = 1
+                keyboard = VkKeyboard(one_time=True)
+                keyboard.add_button('АиП')
+                keyboard.add_button('АСиС')
+                keyboard.add_button('Инфа')
+                keyboard.add_button('Матан')
+                send_message(user_id, 'Какой предмет? Нажми кнопку или напиши предмет.', keyboard)
+            elif stage == 1:
+                lis.append(msg)
+                send_message(user_id, 'Предмет добавлен')
+                stage = 2
+                send_message(user_id, 'Какой тип работы?')
+            elif stage == 2:
+                lis.append(msg)
+                send_message(user_id, 'Тип работы добавлен')
+                stage = 3
+                send_message(user_id, 'Какая дата?')
+            elif stage == 3:
+                lis.append(msg)
+                send_message(user_id, 'Дата добавлена')
+                keyboard = VkKeyboard(one_time=True)
+                keyboard.add_button('Добавить описание')
+                keyboard.add_button('Не добавлять описание')
+                send_message(user_id, 'Добавить описание?', keyboard)
+                stage = 4
+            elif msg == 'добавить описание':
+                stage = 5
+                send_message(user_id, 'Какое описание?')
+            elif stage == 5:
+                lis.append(msg)
+                edit_deadline(stage, user_id, lis)
+                stage = 0
+                lis = []
+                send_message(user_id, 'Дедлайн добавлен')
+                create_mainmenu(user_id)
+            elif msg == 'не добавлять описание':
+                stage = 4
+                edit_deadline(stage, user_id, lis)
+                send_message(user_id, 'Дедлайн добавлен')
+                stage = 0
+                lis = []
+                create_mainmenu(user_id)
