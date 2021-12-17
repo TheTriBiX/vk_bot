@@ -40,7 +40,6 @@ def create_mainmenu(user_id):
 def create_starostamenu(user_id):
     keyboard = VkKeyboard(one_time=True)
     keyboard.add_button('добавить дедлайны')
-    keyboard.add_button('изменить расписание')
     keyboard.add_button('ответить на вопрос')
     send_message(user_id, "Что ты хочешь узнать?", keyboard)
 
