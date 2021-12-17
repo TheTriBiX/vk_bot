@@ -5,6 +5,12 @@ cur = conn.cursor()
 
 
 def ask_questions(user_id, msg):
+    """
+    Функция, которая уведомляет старосту о заданном вопросе, а также передает вопрос в базу данных
+    :param user_id: int, содержит id пользователя, который задал вопрос
+    :param msg: str, содержит вопрос, который задал пользователь
+    :return:
+    """
     cur.execute("""INSERT INTO questions (id, question) VALUES (?, ?)""",
                 (user_id, msg))
     name = cur.execute(f"SELECT fullname FROM user_role WHERE id={user_id}").fetchone()[0]
@@ -14,6 +20,10 @@ def ask_questions(user_id, msg):
 
 
 def checktell_answer():
+    """
+    Функция, служащая для определения наличия неотвеченных вопросов
+    :return: вернет None, если вопросов больше не осталось, вернет вопрос, если вопросы еще есть.
+    """
     question = cur.execute("""SELECT question FROM questions""").fetchone()
     if question == None:
         send_message(184299452, 'Вопросов больше не осталось')
@@ -25,6 +35,12 @@ def checktell_answer():
 
 
 def answer_question(question, answer):
+    """
+    Функция, которая служит для ответа старостой на заданный вопрос. Рассылка с ответом придет всем, кто должен получить
+    ответ, если заданные ими вопросы были идентичны.
+    :param question: str, содержит вопрос, который был задан
+    :param answer: str, содержит ответ, который староста хочет разослать
+    """
     user_id = cur.execute(f"SELECT id FROM questions WHERE question='{question}'").fetchall()
     for user in user_id:
         send_message(user[0], f'Ты задавал вопрос: {question}. '
