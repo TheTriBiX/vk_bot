@@ -102,12 +102,14 @@ if __name__ == '__main__':
                 create_funmenu(user_id)
 
             if bars == 1:
-                grade_bar(1, user_id)
+                grade_bar(0, user_id)
                 bars = 2
             elif bars == 2:
+                grade_bar(1, user_id)
+                bars = 3
+            elif bars == 3:
                 grade_bar(2, user_id)
                 create_funmenu(user_id)
-                bars = 0
 
             if msg == 'оценить бары москвы':
                 send_message(user_id, 'Как называется бар?')
