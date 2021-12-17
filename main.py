@@ -102,7 +102,8 @@ if __name__ == '__main__':
 
             if msg == 'идти ли на пару?':
                 answer = visit_para()
-                create_funmenu(user_id, answer)
+                send_message(user_id, answer)
+                create_funmenu(user_id)
 
             if msg == 'оценить бары москвы':
                 bars = 1
@@ -125,14 +126,14 @@ if __name__ == '__main__':
                 send_message(user_id, 'Какое описание бара?')
             elif bars == 4:
                 lis_bar.append(msg)
-                grade_bar(bars, user_id, lis_bar)
+                grade_bar(bars, lis_bar)
                 bars = 0
                 lis_bar = []
                 send_message(user_id, 'Оценка бара добавлен')
                 create_mainmenu(user_id)
             elif msg == 'не добавлять описание бара':
                 bars = 3
-                grade_bar(bars, user_id, lis_bar)
+                grade_bar(bars, lis_bar)
                 send_message(user_id, 'Оценка бара добавлена')
                 bars = 0
                 lis_bar = []
