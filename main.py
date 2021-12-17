@@ -26,6 +26,24 @@ def send_message(user_id, message, keyboard=None):
     vk.method('messages.send', post)
 
 
+def create_mainmenu(user_id):
+    keyboard = VkKeyboard(one_time=True)
+    keyboard.add_button('Дедлайны')
+    keyboard.add_button('Расписание')
+    keyboard.add_button('Задать вопрос')
+    if cur.execute(f"""SELECT role FROM user_role WHERE id={user_id}""").fetchone() == 'староста':
+        keyboard.add_button('Редактирование информации')
+    send_message(user_id, "Что ты хочешь узнать?", keyboard)
+
+
+def create_starostamenu(user_id):
+    keyboard = VkKeyboard(one_time=True)
+    keyboard.add_button('добавить дедлайны')
+    keyboard.add_button('изменить расписание')
+    keyboard.add_button('ответить на вопрос')
+    send_message(user_id, "Что ты хочешь узнать?", keyboard)
+
+
 if __name__ == '__main__':
     print('starting...')
     quest = 0
@@ -36,10 +54,17 @@ if __name__ == '__main__':
             msg = event.text.lower()
             user_id = event.user_id
 
+            if msg == 'редактирование информации':
+                if cur.execute(f"""SELECT role FROM user_role WHERE id={user_id}""").fetchone() == 'староста':
+                    create_starostamenu(user_id)
+                else:
+                    send_message(user_id, 'Кто-то попытался сломать систему, но система сильнее BibleThump')
+
             if quest == 1:
                 ask_questions(user_id, msg)
                 send_message(user_id, "мы уведомили старосту, жди ответа")
                 quest = 0
+                create_mainmenu(user_id)
 
             if msg == 'Ответить на вопрос':
                 question = checktell_answer()
@@ -47,6 +72,7 @@ if __name__ == '__main__':
             if question:
                 answer_question(question, msg)
                 question = None
+                create_mainmenu(user_id)
 
             if msg == "начать":
                 send_message(user_id, 'Начинаем регистрацию!')
@@ -74,11 +100,7 @@ if __name__ == '__main__':
                 fio = True
 
             if msg == "помощь":
-                keyboard = VkKeyboard(one_time=True)
-                keyboard.add_button('Дедлайны')
-                keyboard.add_button('Расписание')
-                keyboard.add_button('Задать вопрос')
-                send_message(user_id, "Что ты хочешь узнать?", keyboard)
+                create_mainmenu(user_id)
 
             if msg == "дедлайны":
                 send_message(user_id, 'Выбор предмета')
@@ -102,6 +124,7 @@ if __name__ == '__main__':
                             message += ' - '
                     message = message[:-3]
                     send_message(user_id, message)
+                create_mainmenu(user_id)
 
             if msg == 'расписание':
                 pass
@@ -109,6 +132,3 @@ if __name__ == '__main__':
             if msg == 'задать вопрос':
                 quest = 1
                 send_message(user_id, 'Что ты хочешь узнать?')
-
-
-

@@ -25,5 +25,6 @@ def checktell_answer():
 def answer_question(question, answer):
     user_id = cur.execute(f"SELECT id FROM questions WHERE question={question}").fetchall()
     for user in user_id:
-        send_message(user[0], f'Дорогой(ая) и любимый(ая) староста ответил(а) на твой вопрос: {answer}')
+        send_message(user[0], f'Ты задавал вопрос: {question}. '
+                              f'Дорогой(ая) и любимый(ая) староста ответил(а) на твой вопрос: {answer}')
     cur.execute(f'DELETE FROM questions WHERE question={question}')
