@@ -9,8 +9,12 @@ class TestVisitPara(unittest.TestCase):
     def test_the_only_two_possible(self):
         self.assertEqual(visit_para(), 'Иди!' or 'Фиг с ней, не иди')
 
+    def test_classtable_work(self):
+        self.assertEqual(create_timetable('Семенищев Матвей Владимирович', '2021.17.18'), None)
+
     def test_classtable_wrong_name(self):
-        self.assertEqual(create_timetable('фывоарлфыв', '2021.12.17'), None)
+        with self.assertRaises(IndexError):
+            create_timetable('фывоарлфыв', '2021.12.17')
 
     def test_classtable_wrong_date(self):
         self.assertEqual(create_timetable('Семенищев Матвей Владимирович', 'фывфы'), None)
@@ -20,6 +24,7 @@ class TestVisitPara(unittest.TestCase):
 
     def test_deadline_subject(self):
         self.assertEqual(deadline('асис').fetchone()[0], 'асис')
+
 
 
 
