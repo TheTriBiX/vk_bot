@@ -10,7 +10,19 @@ class TestVisitPara(unittest.TestCase):
         self.assertEqual(visit_para(), 'Иди!' or 'Фиг с ней, не иди')
 
     def test_classtable_work(self):
-        self.assertEqual(create_timetable('Семенищев Матвей Владимирович', '2021.17.18'), None)
+        self.assertEqual((create_timetable('Семенищев Матвей Владимирович', '2021.12.18')).replace('\n', ''), """Расписание на сегодня:
+Алгоритмизация и программирование (рус)(Семинар Online) 
+            09:30 - 10:50
+            Ссылка на занятие - https://discord.gg/xF5PYvb8
+Алгоритмизация и программирование (рус)(Практическое занятие) 
+            11:10 - 12:30
+            Ссылка на занятие - None
+История (рус)(Семинар Online) 
+            14:40 - 16:00
+            Ссылка на занятие - https://univ-eiffel.zoom.us/j/83975625022
+
+
+""".replace('\n', ''))
 
     def test_classtable_wrong_name(self):
         with self.assertRaises(IndexError):

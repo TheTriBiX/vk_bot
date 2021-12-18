@@ -21,3 +21,6 @@ def create_timetable(name, today_date):
         return 'Расписание на сегодня:\n' + table
     else:
         return None
+
+
+print(create_timetable('Семенищев Матвей Владимирович', '2021.12.18'))
