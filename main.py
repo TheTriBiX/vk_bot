@@ -80,7 +80,6 @@ def create_funmenu(user_id):
 
 
 if __name__ == '__main__':
-    print(send_message(1, 213))
     print('starting...')
     """
     Работа бота. До начала работы объявлены переменные, которые в будущем могут быть использованы ботом
