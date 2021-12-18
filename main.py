@@ -21,11 +21,11 @@ date = datetime.datetime.now()
 today_date = f'{date.year}.{date.month}.{date.day}'
 
 
-def send_message(user_id, message, keyboard=None):
+def send_message(user_id: int, message: str, keyboard=None):
     """отправляет сообщение пользователю
     :param
-    user_id - vk id пользователя которому нужно отправить сообщение
-    message - текст сообщения
+    user_id: int - vk id пользователя которому нужно отправить сообщение
+    message: str - текст сообщения
     keyboard - передает виртуальную клавиатуру которую нужно будет вывести вместе с сообщением"""
     post = {
         'user_id': user_id,
@@ -80,6 +80,7 @@ def create_funmenu(user_id):
 
 
 if __name__ == '__main__':
+    print(send_message(1, 213))
     print('starting...')
     """
     Работа бота. До начала работы объявлены переменные, которые в будущем могут быть использованы ботом

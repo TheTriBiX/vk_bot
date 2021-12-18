@@ -2,6 +2,8 @@ import unittest
 from easteregg_functions import visit_para
 from timetable import create_timetable
 from Deadline import deadline
+from main import send_message
+import vk_api
 
 
 class TestVisitPara(unittest.TestCase):
@@ -37,7 +39,17 @@ class TestVisitPara(unittest.TestCase):
     def test_deadline_subject(self):
         self.assertEqual(deadline('асис').fetchone()[0], 'асис')
 
+    def test_unknown_keyboard(self):
+        with self.assertRaises(AttributeError):
+            send_message(1, 'asd', 'asd')
 
+    def test_unknown_message(self):
+        with self.assertRaises(vk_api.exceptions.ApiError):
+            send_message(1, 456)
+
+    def test_message(self):
+        with self.assertRaises(vk_api.exceptions.ApiError):
+            send_message('boba', 'biba')
 
 
 if __name__ == '__main__':
