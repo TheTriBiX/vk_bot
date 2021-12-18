@@ -9,7 +9,7 @@ import vk_api
 class TestVisitPara(unittest.TestCase):
 
     def test_the_only_two_possible(self):
-        self.assertEqual(visit_para(), 'Иди!' or 'Фиг с ней, не иди')
+        assert visit_para() in ['Иди!', 'Фиг с ней, не иди']
 
     def test_classtable_work(self):
         self.assertEqual((create_timetable('Семенищев Матвей Владимирович', '2021.12.18')).replace('\n', ''), """Расписание на сегодня:
